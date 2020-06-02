@@ -24,10 +24,12 @@ class App extends Component {
     });
   };
 
-  handleCitySubmit = (e) => {
-    e.preventDefault();
+  componentDidUpdate(prevProps, prevState) {
 
-    const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${APIKey}&units=metric`;
+    if(this.state.value.length < 3) return;
+
+    if (prevState.value !== this.state.value) {
+      const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${APIKey}&units=metric`;
 
     fetch(API)
       .then((response) => {
@@ -59,7 +61,8 @@ class App extends Component {
           };
         });
       });
-  };
+    }
+  }
 
   render() {
     return (
@@ -67,7 +70,6 @@ class App extends Component {
         <Form
           value={this.state.value}
           change={this.handleInputChange}
-          submit={this.handleCitySubmit}
         />
         <Result weather={this.state} />
       </div>
